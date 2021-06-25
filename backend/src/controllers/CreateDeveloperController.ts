@@ -1,14 +1,8 @@
 import { Request, Response } from 'express';
-import { getModelForClass, ReturnModelType } from "typegoose";
 
 import { CreateDeveloperService } from '../services/CreateDeveloperService';
 
 class CreateDeveloperController {
-  private repository: ReturnModelType<typeof Category>;
-
-  constructor() {
-    this.repository = getModelForClass(Category);
-  }
   public async handle(request: Request, reponse: Response): Promise<Response> {
     const { githubUsername, techs, latitude, longitude } = request.body;
    

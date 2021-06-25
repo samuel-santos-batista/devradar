@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { getModelForClass, ReturnModelType } from "@typegoose/typegoose";
+import { Developer } from '../entities/Developer';
+
 
 interface RequestDTO {
   githubUsername: string;
@@ -8,7 +11,13 @@ interface RequestDTO {
 }
 
 class CreateDeveloperService {
-  async execute({ githubUsername, latitude, longitude, techs}: RequestDTO) {
+  private repository: ReturnModelType<typeof Developer>;
+
+  constructor() {
+    this.repository = getModelForClass(Developer);
+  }
+
+  async execute({ githubUsername, latitude, longitude, techs}: RequestDTO): Promise<Developer> {
     const githubUser = await axios.get(`https://api.github.com/users/${githubUsername}`);
       
     const { name, avatar_url: avatarUrl, bio } = githubUser.data;
@@ -29,7 +38,9 @@ class CreateDeveloperService {
       location
     };
 
-    return developer;
+    const developerCreated = await this.repository.create(developer);
+
+    return developerCreated;
   }
 }
 
