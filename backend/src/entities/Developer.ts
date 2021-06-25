@@ -25,7 +25,7 @@ class Developer {
   @prop()
   techs: string[];
 
-  @prop({ type: () => Point })
+  @prop({ type: Point })
   location: Point;
 }
 
